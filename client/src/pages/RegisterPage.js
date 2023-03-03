@@ -1,8 +1,33 @@
+import {useState} from "react";
+
 export default function RegisterPage(){
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+   async function confirmRegister(ev){
+            ev.preventDefault();
+                const response =  await fetch('http://localhost:4001/register',{
+                    method: 'POST',
+                    body: JSON.stringify({username,password}),
+                    headers: {'Content-Type':'application/json'},
+                }); 
+                if(response.status === 200) {
+                    alert('Registration successful');
+                } else {
+                    alert('Registration Failed');
+                }        
+        
+    }
     return(
-        <form className="register">
-            <input type="text" placeholder="username" />
-            <input type="password" placeholder="password" />
+        <form className="register" onSubmit={confirmRegister}>
+            <h1>Register</h1>
+            <input type="text" 
+                   placeholder="username" 
+                   value={username} 
+                   onChange={ev =>setUsername(ev.target.value)} />
+            <input type="password" 
+                   placeholder="password" 
+                   value={password}
+                   onChange={ev =>setPassword(ev.target.value)}/>
             <button>Register</button>
         </form>
     );

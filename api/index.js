@@ -9,9 +9,12 @@ const app = express();
 const salt = bcrypt.genSaltSync(10);
 const secret = 'khfksfkfjkerfyukfkueayf';
 
+
+
 // app.use((req, res, next) => { res.header({"Access-Control-Allow-Origin": "*"}); next(); })
 app.use(cors({credentials:true,origin:'http://localhost:3000'}));
 app.use(express.json());
+
 
   
 
@@ -33,7 +36,7 @@ app.post('/register', async(req, res) => {
         });
     res.json(userDoc);
     } catch(e) {
-        res.status(400).json(`unable register due to ${e.message}`);
+        res.status(400).json(); //`unable register due to ${e.message}`
     }
 });
 
@@ -45,12 +48,14 @@ app.post('/login', async (req, res) =>{
     if(passOk){
         jwt.sign({username,id:userDoc._id}, secret, {}, (err,token) => {
             if(err) throw err;
-            res.status(200).json(token);
+            res.cookie('token', token).json('ok');
+            //res.status(200).json(token);
         });
     } else {
         res.status(400).json('wrong credentials');
     }
 });
+
 
 app.listen(4001);
 
